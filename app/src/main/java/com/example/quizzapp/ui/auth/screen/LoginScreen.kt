@@ -23,26 +23,22 @@ import com.example.quizzapp.ui.auth.LoginViewModel
 import com.example.quizzapp.ui.theme.QuizzappTheme
 
 
-/**
- * Composable "inteligente" ou "stateful" que se conecta ao ViewModel.
- * A sua responsabilidade é obter o estado e passar os eventos para a UI.
- */
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit, // Evento para notificar a navegação em caso de sucesso
+    onLoginSuccess: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    // Recolhe o estado da UI a partir do ViewModel.
+
     val uiState by viewModel.uiState.collectAsState()
 
-    // LaunchedEffect para navegar quando o login for bem-sucedido.
+
     LaunchedEffect(key1 = uiState.loginSuccess) {
         if (uiState.loginSuccess) {
             onLoginSuccess()
         }
     }
 
-    // Chama o Composable "burro" que apenas desenha a UI.
+
     LoginContent(
         uiState = uiState,
         onEmailChange = viewModel::onEmailChange,
@@ -52,10 +48,6 @@ fun LoginScreen(
     )
 }
 
-/**
- * Composable "burro" ou "stateless" que apenas exibe a UI.
- * Recebe todo o estado e os eventos como parâmetros, tornando-o fácil de prever e reutilizar.
- */
 @Composable
 fun LoginContent(
     uiState: LoginUiState,
@@ -66,7 +58,7 @@ fun LoginContent(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // LaunchedEffect para mostrar o Snackbar quando houver um erro.
+
     LaunchedEffect(key1 = uiState.error) {
         uiState.error?.let {
             snackbarHostState.showSnackbar(message = it)
